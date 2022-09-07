@@ -1,0 +1,15 @@
+name: deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pipalacademy/boring-serverless@v0.1.4
+        with:
+          server_url: http://boring.kaustubh-dev.pipal.in
