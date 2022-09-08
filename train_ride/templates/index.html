@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% if config.enable_homepage %}
+    <div class="page-header">
+    <h2>Search Trains</h2>
+    <em>Explore India on the wonderful train network!</em>
+    </div>
+
+    <form>
+      <div class="mb-3">
+        <label for="from-station" class="form-label">From</label>
+        <input type="text" class="form-control" id="from-station">
+      </div>
+      <div class="mb-3">
+        <label for="from-station" class="form-label">To</label>
+        <input type="text" class="form-control" id="to-station">
+      </div>
+      <button type="submit" class="btn btn-primary">Search Trains</button>
+    </form>
+
+  {% else %}
+  <div>
+    <br>
+
+    <div class="alert alert-warning" role="alert">
+      <h4 class="alert-heading">Hold On!</h4>
+      <p>You need to set <code>enable_homepage = True</code> in the <code>train_ride/config.py</code> to enable the home page.</p>
+    </div>
+  </div>
+
+  {% endif %}
+{% endblock %}
