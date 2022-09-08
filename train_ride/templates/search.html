@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="page-header">
+    <h2>Search Trains</h2>
+    <em>Explore India on the wonderful train network!</em>
+    </div>
+
+    <p>Coming soon!</p>
+
+    <div>
+        {% for train in trains %}
+            <pre>{{train | tojson(indent="  ") }}</pre>
+        {% endfor %}
+    </div>
+    {% endblock %}
