@@ -1,4 +1,5 @@
 const autocompleteURL = "/api/stations";
+const searchURL = "/api/search";
 
 function getQuerystring(obj) {
   return Object.entries(obj)
@@ -20,6 +21,16 @@ async function getAutocomplete(input) {
       text: `${name} - ${code}`,
     };
   });
+}
+
+async function searchTrains(from, to, date, ticketClass) {
+  const qs = getQuerystring({ from,  to, date, ticket_class: ticketClass })
+  const url = `${searchURL}?${qs}`
+
+  const response = await fetch(url)
+  const trains = await response.json()
+
+  return trains
 }
 
 function selectFromStation(value, text) {
@@ -55,6 +66,26 @@ function getAutocompleteItem(value, text) {
         <li class="autocomplete-item" data-value="${value}">
             ${text}
         </li>`;
+}
+
+function getTrainCard(train) {
+  return `
+  <div class="card mb-2">
+    <div class="card-header">
+      <h5>${train.train_name} (${train.train_number})</h5>
+    </div>
+    <div class="card-body d-flex justify-content-between">
+      <div>
+        <h3>${train.start_time}</h3>
+        <h5>${train.from_station_name}</h5>
+      </div>
+      <div>
+        <h3>${train.end_time}</h3>
+        <h5>${train.to_station_name}</h5>
+      </div>
+    </div>
+  </div>
+  `
 }
 
 $(document).ready(function () {
@@ -103,6 +134,22 @@ $(document).ready(function () {
     $(textTarget).val(text);
   });
 
-  refreshAutocomplete("", $fromList)
-  refreshAutocomplete("", $toList)
+  $("#trains-search").submit(async function(e) {
+    e.preventDefault()
+
+    let argsList = $(this).serializeArray()
+    console.log("argslist", argsList)
+
+    let args = argsList.reduce((a, {name, value}) => ({ ...a, [name]: value }), {})
+    console.log("args", args)
+
+    const trains = await searchTrains(args.from, args.to, args.date || "", args.ticket_class || "")
+    console.log("trains", trains)
+
+    $("#trains").html(
+      trains.map(getTrainCard).join("\n")
+    )
+
+    $("#trains-container").show()
+  })
 });
