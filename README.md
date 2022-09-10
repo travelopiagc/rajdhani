@@ -23,4 +23,7 @@ to your server where you hosted the deployment platform.
 For each fork, you'll have to perform a one-time action to enable GitHub actions on the
 repository. This can be found in the "Actions" tab on the repository page.
 
+In the `boring-serverless/config.yml` file, you will need to add repository names that
+you want to host on your platform. This is a basic authentication check before deployment.
+
 All set!
