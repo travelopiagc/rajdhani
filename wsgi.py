@@ -4,4 +4,4 @@
 This is the convention used by boring-serverless to
 locate the entrypoint for an application.
 """
-from train.app import app
+from rajdhani.app import app

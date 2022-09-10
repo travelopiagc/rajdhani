@@ -11,7 +11,7 @@ repository:
 
 ```
 mkdir apps
-git clone https://github.com/pipalacademy/train-ride apps/pipalacademy
+git clone https://github.com/pipalacademy/rajdhani apps/pipalacademy
 venv/bin/python -m pip install -r apps/pipalacademy/requirements.txt
 rm -rf apps/pipalacademy
 ```

@@ -1,4 +1,4 @@
-from train_ride.app import app
+from rajdhani.app import app
 
 if __name__ == "__main__":
     app.run()

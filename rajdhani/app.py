@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, request
 from . import config
 from . import db
 
-app = Flask("train_ride")
+app = Flask("rajdhani")
 
 
 @app.route("/")
