@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: pipalacademy/boring-serverless@v0.1.4
+      - uses: pipalacademy/hamr@v0.1.4
         with:
           server_url: https://boring.rajdhani.pipal.in
