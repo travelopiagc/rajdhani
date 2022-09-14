@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: pipalacademy/hamr@v0.1.4
+      - uses: pipalacademy/hamr@v0.2
         with:
-          server_url: https://boring.rajdhani.pipal.in
+          server_url: https://hamr.rajdhani.pipal.in
+          app_name: ${{ github.actor }}
