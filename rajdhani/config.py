@@ -1,7 +1,7 @@
 
 
 # Set this to True to enable the home page
-enable_homepage = True
+enable_homepage = False
 
 db_path = "trains.db"
 db_uri = f"sqlite:///{db_path}"
