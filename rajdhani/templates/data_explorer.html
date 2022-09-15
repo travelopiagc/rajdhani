@@ -21,33 +21,50 @@ SELECT * FROM station where state='Karnataka';
 </div>
 
 <div class="mb-5">
-    <div class="mb-2">
-        <label class="form-label">Your SQL query</label>
-        <textarea id="query" class="form-control">SELECT name, number FROM train LIMIT 2</textarea>
-    </div>
+    <form method="get">
+        <div class="mb-2">
+            <label class="form-label">Your SQL query</label>
+            {% set default_query = 'SELECT name, number FROM train LIMIT 2' %}
+            <textarea name="q" class="form-control" autofocus>{{ query or default_query }}</textarea>
+        </div>
 
-    <button id="btn-run" type="button" class="btn btn-primary">Run</button>
+        <button type="submit" class="btn btn-primary">Run</button>
+    </form>
 </div>
 
 <div id="output">
-    <div id="errors"></div>
-    <div id="output-table"></div>
+    {% if error %}
+    <div id="errors">
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if columns or rows %}
+    <div id="output-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    {% for colname in columns %}
+                    <th scope="col">{{ colname }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    {% for value in row %}
+                    <td>{{ value }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 </div>
 
-{% endblock %}
-
-{% block stylesheets %}
-{{ super() }}
-
-<link href="https://unpkg.com/frappe-datatable@1.16.5/dist/frappe-datatable.min.css" rel="stylesheet">
-{% endblock %}
-
-{% block javascripts %}
-{{ super() }}
-
-<script src="https://unpkg.com/clusterize.js@0.18.0/clusterize.min.js"></script>
-<script src="https://unpkg.com/sortablejs@1.7.0/Sortable.min.js"></script>
-<script src="https://unpkg.com/frappe-datatable@1.16.5/dist/frappe-datatable.min.js"></script>
-
-<script src="/static/data_explorer.js"></script>
 {% endblock %}

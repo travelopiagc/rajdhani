@@ -1,4 +1,7 @@
-from flask import Flask, jsonify, render_template, request
+import sqlite3
+
+from flask import Flask, jsonify, redirect, render_template, request
+from urllib.parse import urlparse
 from . import config
 from . import db
 from . import db_ops
@@ -56,6 +59,26 @@ def exec_db():
         "rows": rows
     }
 
-@app.route("/explore-data")
+@app.route("/data-explorer")
 def explore_data():
-    return render_template("data_explorer.html")
+    q = request.args.get("q")
+
+    error, columns, rows = None, None, None
+    if q:
+        try:
+            columns, rows = db_ops.exec_query(q)
+        except (sqlite3.Error, sqlite3.Warning) as e:
+            error = str(e)
+
+    return render_template(
+        "data_explorer.html",
+        error=error, columns=columns, rows=rows, query=q,
+    )
+
+@app.route("/progress")
+def progress():
+    url = urlparse(request.base_url)
+    username = url.hostname.split(".", maxsplit=1)[0]
+    redirect_url = f"{config.base_status_page_url}/{username}"
+
+    return redirect(redirect_url, code=302)
