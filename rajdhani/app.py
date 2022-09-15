@@ -56,6 +56,6 @@ def exec_db():
         "rows": rows
     }
 
-@app.route("/data_explorer")
-def explorer():
+@app.route("/explore-data")
+def explore_data():
     return render_template("data_explorer.html")
