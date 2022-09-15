@@ -13,6 +13,11 @@ def reset_db():
     init_db()
 
 
+def ensure_db():
+    if not Path(db_path).is_file():
+        init_db()
+
+
 def download_file(url, location):
     response = requests.get(url)
     with open(location, "wb") as f:
