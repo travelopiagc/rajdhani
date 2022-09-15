@@ -58,7 +58,7 @@ def exec_db():
         "rows": rows
     }
 
-@app.route("/explore-data")
+@app.route("/data-explorer")
 def explore_data():
     q = request.args.get("q")
 
@@ -66,7 +66,7 @@ def explore_data():
     if q:
         try:
             columns, rows = db_ops.exec_query(q)
-        except sqlite3.Error as e:
+        except (sqlite3.Error, sqlite3.Warning) as e:
             error = str(e)
 
     return render_template(
