@@ -46,3 +46,16 @@ def search():
 def reset_db():
     db_ops.reset_db()
     return "ok"
+
+@app.route("/db/exec")
+def exec_db():
+    q = request.args.get("q")
+    columns, rows = db_ops.exec_query(q)
+    return {
+        "columns": columns,
+        "rows": rows
+    }
+
+@app.route("/data_explorer")
+def explorer():
+    return render_template("data_explorer.html")
