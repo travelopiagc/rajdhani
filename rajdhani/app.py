@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request
 from . import config
 from . import db
+from . import db_ops
+
 
 app = Flask(__name__)
 
@@ -39,3 +41,8 @@ def search():
         to_station=to_station,
         ticket_class=ticket_class,
         date=date)
+
+@app.route("/db/reset")
+def reset_db():
+    db_ops.reset_db()
+    return "ok"
