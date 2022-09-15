@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request
 from . import config
 from . import db
+from . import db_ops
+
 
 app = Flask(__name__)
 
@@ -39,3 +41,21 @@ def search():
         to_station=to_station,
         ticket_class=ticket_class,
         date=date)
+
+@app.route("/db/reset")
+def reset_db():
+    db_ops.reset_db()
+    return "ok"
+
+@app.route("/db/exec")
+def exec_db():
+    q = request.args.get("q")
+    columns, rows = db_ops.exec_query(q)
+    return {
+        "columns": columns,
+        "rows": rows
+    }
+
+@app.route("/explore-data")
+def explore_data():
+    return render_template("data_explorer.html")
