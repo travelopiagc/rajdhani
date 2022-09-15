@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import Flask, jsonify, render_template, request
 from . import config
 from . import db
@@ -58,4 +60,16 @@ def exec_db():
 
 @app.route("/explore-data")
 def explore_data():
-    return render_template("data_explorer.html")
+    q = request.args.get("q")
+
+    error, columns, rows = None, None, None
+    if q:
+        try:
+            columns, rows = db_ops.exec_query(q)
+        except sqlite3.Error as e:
+            error = str(e)
+
+    return render_template(
+        "data_explorer.html",
+        error=error, columns=columns, rows=rows, query=q,
+    )
