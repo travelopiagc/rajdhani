@@ -40,3 +40,10 @@ SEARCH_TRAINS = [
         "duration_m": 55
     },
 ]
+
+SCHEDULE = [
+    {"station_code": "BCT", "station_name": "Mumbai Central", "day": "1.0", "arrival": "None", "departure": "23:25:00"},
+    {"station_code": "MX", "station_name": "Mumbai Mahalakshmi", "day": "1.0", "arrival": "23:26:00", "departure": "23:26:00"},
+    {"station_code": "PL", "station_name": "Mumbai Lower Parel", "day": "1.0", "arrival": "23:27:00", "departure": "23:27:00"},
+    {"station_code": "ADI", "station_name": "AHMEDABAD JN", "day": "2.0", "arrival": "06:00:00", "departure": "None"},
+]

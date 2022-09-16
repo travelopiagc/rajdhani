@@ -36,3 +36,8 @@ def search_trains(
     # and replace the following dummy implementation
 
     return placeholders.SEARCH_TRAINS
+
+def get_schedule(train_number):
+    """Returns the schedule of a train.
+    """
+    return placeholders.SCHEDULE
