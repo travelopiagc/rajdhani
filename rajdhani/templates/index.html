@@ -22,6 +22,21 @@
         <ul id="to-station-autocomplete-items" class="form-control autocomplete-list" style="display: none;" data-text-target="#to-station-text" data-value-target="#to-station">
         </ul>
       </div>
+      <div class="row mb-3">
+        {% if config.flag_ticketclass_in_search %}
+        <div class="col-auto d-flex align-items-end">
+            <select name="ticket_class" class="form-select">
+                <option selected value="">Select ticket class</option>
+                <option value="sleeper">Sleeper</option>
+                <option value="third_ac">Third AC</option>
+                <option value="second_ac">Second AC</option>
+                <option value="first_ac">First AC</option>
+                <option value="first_class">First Class</option>
+                <option value="chair_car">Chair Car</option>
+            </select>
+        </div>
+        {% endif %}
+      </div>
       <button type="submit" class="btn btn-primary">Search Trains</button>
     </form>
 
