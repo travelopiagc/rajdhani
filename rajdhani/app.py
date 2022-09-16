@@ -15,12 +15,17 @@ def index():
     from_station_code = request.args.get("from_station_code")
     to_station_code = request.args.get("to_station_code")
     ticket_class = request.args.get("class")
+    departure_time = request.args.getlist("dt")
+    arrival_time = request.args.getlist("at")
 
     if from_station_code and to_station_code:
+        print("search-trains")
         trains = db.search_trains(
             from_station_code=from_station_code,
             to_station_code=to_station_code,
-            ticket_class=ticket_class)
+            ticket_class=ticket_class,
+            departure_time=departure_time,
+            arrival_time=arrival_time)
     else:
         trains = None
     return render_template("index.html", config=config, trains=trains, args=request.args)
@@ -38,12 +43,20 @@ def api_stations():
 
 @app.route("/api/search")
 def api_search():
-    from_station = request.args.get("from")
-    to_station = request.args.get("to")
+    from_station_code = request.args.get("from")
+    to_station_code = request.args.get("to")
     ticket_class = request.args.get("class")
-    date = request.args.get("date")
+    departure_time = request.args.getlist("dt")
+    arrival_time = request.args.getlist("at")
 
-    trains = db.search_trains(from_station, to_station, ticket_class, date)
+    trains = db.search_trains(
+        from_station_code=from_station_code,
+        to_station_code=to_station_code,
+        ticket_class=ticket_class,
+        departure_time=departure_time,
+        arrival_time=arrival_time)
+
+    trains = [dict(t) for t in trains]
     return jsonify(trains)
 
 @app.route("/search")
