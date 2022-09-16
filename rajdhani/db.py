@@ -37,29 +37,27 @@ def search_trains(from_station, to_station, date, ticket_class):
 
     return [
         {
-            "train_number": "12028",
-            "train_name": "Shatabdi Exp",
+            "number": "12028",
+            "name": "Shatabdi Exp",
             "from_station_code": "SBC",
             "from_station_name": "Bangalore",
             "to_station_code": "MAS",
             "to_station_name": "Chennai",
-            "start_date": date,
-            "start_time": "06:00",
-            "end_date":  date,
-            "end_time": "11:00",
-            "duration": "05:00"
+            "departure": "06:00",
+            "arrival": "11:00",
+            "duration_h": 5,
+            "duration_m": 0
         },
         {
-            "train_number": "12608",
-            "train_name": "Lalbagh Exp",
+            "number": "12608",
+            "name": "Lalbagh Exp",
             "from_station_code": "SBC",
             "from_station_name": "Bangalore",
             "to_station_code": "MAS",
             "to_station_name": "Chennai",
-            "start_date": date,
-            "start_time": "06:20",
-            "end_date":  date,
-            "end_time": "12:15",
-            "duration": "05:55"
+            "departure": "06:20",
+            "arrival": "12:15",
+            "duration_h": 5,
+            "duration_m": 55
         },
     ]
