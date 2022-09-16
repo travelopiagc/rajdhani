@@ -20,7 +20,7 @@ def search_stations(q):
     # and replace the following dummy implementation
     return placeholders.AUTOCOMPLETE_STATIONS
 
-def search_trains(from_station, to_station, date, ticket_class):
+def search_trains(from_station_code, to_station_code, ticket_class=None):
     """Returns all the trains that source to destination stations on
     the given date. When ticket_class is provided, this should return
     only the trains that have that ticket class.
