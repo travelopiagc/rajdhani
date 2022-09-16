@@ -2,6 +2,7 @@
 Module to interact with the database.
 """
 
+from . import placeholders
 from . import db_ops
 
 db_ops.ensure_db()
@@ -17,13 +18,7 @@ def search_stations(q):
     """
     # TODO: make a db query to get the matching stations
     # and replace the following dummy implementation
-
-    return [
-        {"code": "SBC", "name": "Bangalore"},
-        {"code": "MAS", "name": "Chennai"},
-        {"code": "NDLS", "name": "New Delhi"},
-        {"code": "MMCT", "name": "Mumbai"}
-    ]
+    return placeholders.AUTOCOMPLETE_STATIONS
 
 def search_trains(from_station, to_station, date, ticket_class):
     """Returns all the trains that source to destination stations on
@@ -35,29 +30,4 @@ def search_trains(from_station, to_station, date, ticket_class):
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation
 
-    return [
-        {
-            "number": "12028",
-            "name": "Shatabdi Exp",
-            "from_station_code": "SBC",
-            "from_station_name": "Bangalore",
-            "to_station_code": "MAS",
-            "to_station_name": "Chennai",
-            "departure": "06:00",
-            "arrival": "11:00",
-            "duration_h": 5,
-            "duration_m": 0
-        },
-        {
-            "number": "12608",
-            "name": "Lalbagh Exp",
-            "from_station_code": "SBC",
-            "from_station_name": "Bangalore",
-            "to_station_code": "MAS",
-            "to_station_name": "Chennai",
-            "departure": "06:20",
-            "arrival": "12:15",
-            "duration_h": 5,
-            "duration_m": 55
-        },
-    ]
+    return placeholders.SEARCH_TRAINS
