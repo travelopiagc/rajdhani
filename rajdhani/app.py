@@ -1,14 +1,21 @@
 import sqlite3
 
-from flask import Flask, jsonify, redirect, render_template, request
+from flask import Flask, abort, jsonify, redirect, render_template, request
 from urllib.parse import urlparse
 from . import config
 from . import db
 from . import db_ops
+from . import auth
 
 
 app = Flask(__name__)
 
+app.secret_key = config.secret_key
+
+
+@app.context_processor
+def add_context():
+    return dict(config=config)
 
 @app.route("/")
 def index():
@@ -28,7 +35,7 @@ def index():
             arrival_time=arrival_time)
     else:
         trains = None
-    return render_template("index.html", config=config, trains=trains, args=request.args)
+    return render_template("index.html", trains=trains, args=request.args)
 
 @app.route("/trains/<number>")
 def schedule(number):
@@ -116,3 +123,22 @@ def progress():
     redirect_url = f"{config.base_status_page_url}/{username}"
 
     return redirect(redirect_url, code=302)
+
+@app.route("/hello")
+def hello():
+    """Simple endpoint to check the authenticated user is
+    """
+    return render_template("hello.html", user=auth.get_logged_in_user_email())
+
+@app.route("/login")
+def login():
+    if email := request.args.get("email"):
+        auth.login(email)
+        return redirect("/hello")
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    auth.logout()
+    return redirect("/")
