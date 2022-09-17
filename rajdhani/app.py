@@ -10,7 +10,7 @@ from . import auth
 
 app = Flask(__name__)
 
-app.secret_key = auth.get_secret_key()
+app.secret_key = config.secret_key
 
 
 @app.route("/")

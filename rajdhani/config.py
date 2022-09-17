@@ -1,5 +1,7 @@
 import os
 
+secret_key = os.getenv("SECRET_KEY", "helloworld")
+
  # Feature Flags to enable features incrementally
  # Note: Please enable these flags only when the task asks you to do
 
@@ -21,19 +23,10 @@ base_status_page_url = "https://rajdhani.pipal.in"
 # This default configuration will work with a locally running
 # server. e.g. with `pip install aiosmtpd; aiosmtpd -n`
 
-smtp = {
-    "hostname": os.getenv("SMTP_HOSTNAME", "localhost"),
-    "port": os.getenv("SMTP_PORT", "8025"),
-    "username": os.getenv("SMTP_USERNAME", None),
-    "password": os.getenv("SMTP_PASSWORD", None)
-}
-
-smtp_test = {
-    "hostname": os.getenv("SMTP_TEST_HOSTNAME", "localhost"),
-    "port": os.getenv("SMTP_TEST_PORT", "8026"),
-    "username": os.getenv("SMTP_TEST_USERNAME", None),
-    "password": os.getenv("SMTP_TEST_PASSWORD", None)
-}
+smtp_hostname = os.getenv("SMTP_HOSTNAME", "localhost"),
+smtp_port = os.getenv("SMTP_PORT", "8025"),
+smtp_username = os.getenv("SMTP_USERNAME", None),
+smtp_password = os.getenv("SMTP_PASSWORD", None)
 
 # Authentication
 # Note: Please do not modify this
