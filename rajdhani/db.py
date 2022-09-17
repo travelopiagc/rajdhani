@@ -24,6 +24,7 @@ def search_trains(
         from_station_code,
         to_station_code,
         ticket_class=None,
+        departure_date=None,
         departure_time=[],
         arrival_time=[]):
     """Returns all the trains that source to destination stations on

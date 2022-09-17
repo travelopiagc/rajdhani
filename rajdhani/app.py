@@ -22,6 +22,7 @@ def index():
     from_station_code = request.args.get("from_station_code")
     to_station_code = request.args.get("to_station_code")
     ticket_class = request.args.get("class")
+    departure_date = request.args.get("date")
     departure_time = request.args.getlist("dt")
     arrival_time = request.args.getlist("at")
 
@@ -31,6 +32,7 @@ def index():
             from_station_code=from_station_code,
             to_station_code=to_station_code,
             ticket_class=ticket_class,
+            departure_date=departure_date,
             departure_time=departure_time,
             arrival_time=arrival_time)
     else:
