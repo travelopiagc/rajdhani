@@ -41,3 +41,12 @@ create table schedule (
     arrival text,
     departure text
 );
+
+
+create table bookings (
+    train_number text references train(number),
+    ticket_class text,
+    passenger_name text,
+    passenger_email text,
+    departure_date text
+);
