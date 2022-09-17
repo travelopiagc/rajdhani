@@ -42,3 +42,11 @@ def get_schedule(train_number):
     """Returns the schedule of a train.
     """
     return placeholders.SCHEDULE
+
+def book_ticket(train_number, ticket_class, date):
+    """Books a ticket and returns the booking ID.
+    """
+    # TODO: make a db query and insert a new booking
+    # into the booking table
+
+    return 1
