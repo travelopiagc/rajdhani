@@ -49,7 +49,7 @@ def book_ticket(train_number, ticket_class, departure_date, passenger_name, pass
     # TODO: make a db query and insert a new booking
     # into the booking table
 
-    pass
+    return placeholders.TRIPS[0]
 
 def get_trips(email):
     """Returns the bookings made by the user
