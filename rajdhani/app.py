@@ -132,4 +132,12 @@ def magic_link(token):
 
 @app.route("/login")
 def login():
+    if auth.get_logged_in_user_email():
+        return redirect("/hello")
+
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    auth.logout()
+    return redirect("/")
