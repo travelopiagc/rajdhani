@@ -1,6 +1,6 @@
 import sqlite3
 
-from flask import Flask, abort, g, jsonify, redirect, render_template, request
+from flask import Flask, abort, jsonify, redirect, render_template, request
 from urllib.parse import urlparse
 from . import config
 from . import db
@@ -111,28 +111,10 @@ def hello():
     else:
         abort(403)
 
-@app.route("/magic-link/new")
-def new_magic_link():
-    email = request.args.get("email")
-    if not email:
-        return "Need an email!", 400
-
-    testing = request.args.get("mode") == "test"
-    auth.send_magic_link(email, testing=testing)
-    return "Mail sent! Please wait for it."
-
-@app.route("/magic-link/login/<token>")
-def magic_link(token):
-    email = auth.decode_magic_token(token)
-    if email:
-        auth.login_user(email)
-        return "Login successful"
-    else:
-        return "Token is invalid", 400
-
 @app.route("/login")
 def login():
-    if auth.get_logged_in_user_email():
+    if email := request.args.get("email"):
+        auth.login(email)
         return redirect("/hello")
 
     return render_template("login.html")
