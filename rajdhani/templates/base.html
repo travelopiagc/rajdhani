@@ -27,6 +27,11 @@
             <li class="nav-item">
               <a class="nav-link" href="/data-explorer">Data Explorer</a>
             </li>
+            {% if config.flag_login %}
+            <li class="nav-item">
+              <a class="nav-link" href="/hello">Hello</a>
+            </li>
+            {% endif %}
           </ul>
           {% if config.flag_login %}
           {% if "user_email" not in session %}

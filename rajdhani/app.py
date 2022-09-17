@@ -110,10 +110,7 @@ def progress():
 def hello():
     """Simple endpoint to check the authenticated user is
     """
-    if (email := auth.get_logged_in_user_email()):
-        return f"Hello, {email}!"
-    else:
-        abort(403)
+    return render_template("hello.html", user=auth.get_logged_in_user_email())
 
 @app.route("/login")
 def login():
