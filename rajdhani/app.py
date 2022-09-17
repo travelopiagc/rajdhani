@@ -6,7 +6,7 @@ from . import config
 from . import db
 from . import db_ops
 from . import auth
-
+from . import notifications
 
 app = Flask(__name__)
 
@@ -144,11 +144,13 @@ def book_ticket():
     if not email:
         return redirect("/login")
 
-    db.book_ticket(train_number=request.args.get("train"),
-                   ticket_class=request.args.get("class"),
-                   date=request.args.get("date"),
-                   passenger_name=request.args.get("passenger_name"),
-                   passenger_email=email)
+    booking = db.book_ticket(
+                train_number=request.args.get("train"),
+                ticket_class=request.args.get("class"),
+                date=request.args.get("date"),
+                passenger_name=request.args.get("passenger_name"),
+                passenger_email=email)
+    notifications.send_booking_confirmation_email(booking)
 
     return redirect("/bookings")
 
