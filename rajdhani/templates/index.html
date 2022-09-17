@@ -23,7 +23,6 @@
     <div class="mb-3" id="to-station-div">
       <label for="ticket-class" class="form-label">Class</label>
       <select name="class" class="form-control" id="ticket-class">
-        <option value="" {{ "selected" if args.class == "" }}>All Classes</option>
         <option value="SL" {{ "selected" if args.class == "SL" }}>Sleeper</option>
         <option value="3A" {{ "selected" if args.class == "3A" }}>Third AC</option>
         <option value="2A" {{ "selected" if args.class == "2A" }}>Second AC</option>
@@ -70,7 +69,7 @@
       </div>
       {% if config.flag_bookings %}
       <div>
-        <a class="btn btn-primary" href="/book-ticket-page?train={{ train.number }}&class={{ args.class }}&date={{ args.date }}">Book ticket</a>
+        <a class="btn btn-primary" href="/book-ticket?train={{ train.number }}&class={{ args.class }}&date={{ args.date }}">Book ticket</a>
       </div>
       {% endif %}
     </div>

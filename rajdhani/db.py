@@ -43,10 +43,18 @@ def get_schedule(train_number):
     """
     return placeholders.SCHEDULE
 
-def book_ticket(train_number, ticket_class, date):
-    """Books a ticket and returns the booking ID.
+def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
+    """Book a ticket for passenger
     """
     # TODO: make a db query and insert a new booking
     # into the booking table
 
-    return 1
+    pass
+
+def get_trips(email):
+    """Returns the bookings made by the user
+    """
+    # TODO: make a db query and get the bookings
+    # made by user with `email`
+
+    return placeholders.TRIPS

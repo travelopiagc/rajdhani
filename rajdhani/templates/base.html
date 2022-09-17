@@ -32,6 +32,11 @@
               <a class="nav-link" href="/hello">Hello</a>
             </li>
             {% endif %}
+            {% if config.flag_login and "user_email" in session %}
+            <li class="nav-item">
+              <a class="nav-link" href="/bookings">My Bookings</a>
+            </li>
+            {% endif %}
           </ul>
           {% if config.flag_login %}
           {% if "user_email" not in session %}

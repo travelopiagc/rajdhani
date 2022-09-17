@@ -43,11 +43,16 @@ create table schedule (
 );
 
 
-create table bookings (
+create table booking (
     id integer primary key,
     train_number text references train(number),
-    ticket_class text,
+    train_name text,
+    from_station_code text,
+    from_station_name text,
+    to_station_code text,
+    to_station_name text,
     passenger_name text,
     passenger_email text,
-    departure_date text
+    ticket_class text,
+    date text
 );

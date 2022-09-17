@@ -126,23 +126,22 @@ def progress():
 
     return redirect(redirect_url, code=302)
 
-@app.route("/book-ticket-page")
+@app.route("/book-ticket", methods=["GET", "POST"])
 def book_ticket_page():
-    if not auth.get_logged_in_user_email():
-        return redirect("/login")
+    if request.method == "POST":
+        db.book_ticket(train_number=request.form.get("train"),
+                       ticket_class=request.form.get("class"),
+                       departure_date=request.form.get("date"),
+                       passenger_name=request.form.get("passenger_name"),
+                       passenger_email=request.form.get("passenger_email"))
 
-    train_number = request.args.get("train")
-    ticket_class = request.args.get("class")
-    date = request.args.get("date")
+        return redirect("/thank-you")
+    else:
+        email = auth.get_logged_in_user_email()
 
-    return render_template("book_ticket.html",
-                           train_number=train_number, ticket_class=ticket_class, date=date)
-
-@app.route("/book-ticket")
-def book_ticket():
-    email = auth.get_logged_in_user_email()
-    if not email:
-        return redirect("/login")
+        train_number = request.args.get("train")
+        ticket_class = request.args.get("class")
+        date = request.args.get("date")
 
     booking = db.book_ticket(
                 train_number=request.args.get("train"),
@@ -151,8 +150,14 @@ def book_ticket():
                 passenger_name=request.args.get("passenger_name"),
                 passenger_email=email)
     notifications.send_booking_confirmation_email(booking)
+    return render_template("book_ticket.html",
+                           train_number=train_number,
+                           ticket_class=ticket_class,
+                           date=date, email=email)
 
-    return redirect("/bookings")
+@app.route("/thank-you")
+def thank_you():
+    return render_template("thank_you.html")
 
 @app.route("/bookings")
 def my_bookings():
@@ -160,7 +165,8 @@ def my_bookings():
     if not email:
         return redirect("/login")
 
-    return "hello"
+    bookings = db.get_trips(email)
+    return render_template("bookings.html", bookings=bookings)
 
 @app.route("/hello")
 def hello():
