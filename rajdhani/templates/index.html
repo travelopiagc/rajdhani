@@ -15,6 +15,10 @@
     <ul id="to-station-autocomplete-items" class="form-control autocomplete-list" style="display: none;" data-text-target="#to-station-text" data-value-target="#to-station">
     </ul>
   </div>
+  <div class="mb-3">
+    <label for="departure-date" class="form-label">Date</label>
+    <input type="date" class="form-control" name="date"></input>
+  </div>
   {% if config.flag_ticketclass_in_search %}
     <div class="mb-3" id="to-station-div">
       <label for="ticket-class" class="form-label">Class</label>
