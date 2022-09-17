@@ -17,7 +17,7 @@
   </div>
   <div class="mb-3">
     <label for="departure-date" class="form-label">Date</label>
-    <input type="date" class="form-control" name="date" value="{{ args.date }}"></input>
+    <input type="date" class="form-control" name="date" value="{{ args.date or today }}"></input>
   </div>
   {% if config.flag_ticketclass_in_search %}
     <div class="mb-3" id="to-station-div">

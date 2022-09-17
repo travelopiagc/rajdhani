@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 from flask import Flask, abort, jsonify, redirect, render_template, request
 from urllib.parse import urlparse
@@ -37,7 +38,9 @@ def index():
             arrival_time=arrival_time)
     else:
         trains = None
-    return render_template("index.html", trains=trains, args=request.args)
+
+    today = datetime.today().strftime("%Y-%m-%d")
+    return render_template("index.html", trains=trains, args=request.args, today=today)
 
 @app.route("/trains/<number>")
 def schedule(number):
