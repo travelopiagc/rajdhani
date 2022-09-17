@@ -28,10 +28,12 @@
               <a class="nav-link" href="/data-explorer">Data Explorer</a>
             </li>
           </ul>
+          {% if config.flag_login %}
           {% if "user_email" not in session %}
           <a class="btn btn-dark" href="/login">Login</a>
           {% else %}
-          <span>Logged in</span>
+          <a class="btn btn-dark" href="/logout">Logout</a>
+          {% endif %}
           {% endif %}
         </div>
       </div>

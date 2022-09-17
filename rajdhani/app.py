@@ -13,6 +13,10 @@ app = Flask(__name__)
 app.secret_key = config.secret_key
 
 
+@app.context_processor
+def add_context():
+    return dict(config=config)
+
 @app.route("/")
 def index():
     from_station_code = request.args.get("from_station_code")
@@ -26,7 +30,7 @@ def index():
             ticket_class=ticket_class)
     else:
         trains = None
-    return render_template("index.html", config=config, trains=trains, args=request.args)
+    return render_template("index.html", trains=trains, args=request.args)
 
 @app.route("/api/flags")
 def api_flags():

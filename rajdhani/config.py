@@ -9,6 +9,7 @@ flag_homepage = False
 flag_show_schedule_link = False
 flag_ticketclass_in_search = False
 flag_search_filters = False
+flag_login = False
 
 ## Database configurations
 ## Note: Please do not modify these
@@ -27,8 +28,3 @@ smtp_hostname = os.getenv("SMTP_HOSTNAME", "localhost"),
 smtp_port = os.getenv("SMTP_PORT", "8025"),
 smtp_username = os.getenv("SMTP_USERNAME", None),
 smtp_password = os.getenv("SMTP_PASSWORD", None)
-
-# Authentication
-# Note: Please do not modify this
-
-secret_key_file = "secret_key.txt"
