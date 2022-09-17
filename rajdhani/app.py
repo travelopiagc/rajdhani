@@ -117,7 +117,8 @@ def new_magic_link():
     if not email:
         return "Need an email!", 400
 
-    auth.send_magic_link(email)
+    testing = request.args.get("mode") == "test"
+    auth.send_magic_link(email, testing=testing)
     return "Mail sent! Please wait for it."
 
 @app.route("/magic-link/login/<token>")

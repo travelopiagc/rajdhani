@@ -28,6 +28,13 @@ smtp = {
     "password": os.getenv("SMTP_PASSWORD", None)
 }
 
+smtp_test = {
+    "hostname": os.getenv("SMTP_TEST_HOSTNAME", "localhost"),
+    "port": os.getenv("SMTP_TEST_PORT", "8026"),
+    "username": os.getenv("SMTP_TEST_USERNAME", None),
+    "password": os.getenv("SMTP_TEST_PASSWORD", None)
+}
+
 # Authentication
 # Note: Please do not modify this
 
