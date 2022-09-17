@@ -22,6 +22,7 @@ def index():
     from_station_code = request.args.get("from_station_code")
     to_station_code = request.args.get("to_station_code")
     ticket_class = request.args.get("class")
+    departure_date = request.args.get("date")
     departure_time = request.args.getlist("dt")
     arrival_time = request.args.getlist("at")
 
@@ -31,6 +32,7 @@ def index():
             from_station_code=from_station_code,
             to_station_code=to_station_code,
             ticket_class=ticket_class,
+            departure_date=departure_date,
             departure_time=departure_time,
             arrival_time=arrival_time)
     else:
@@ -123,6 +125,40 @@ def progress():
     redirect_url = f"{config.base_status_page_url}/{username}"
 
     return redirect(redirect_url, code=302)
+
+@app.route("/book-ticket-page")
+def book_ticket_page():
+    if not auth.get_logged_in_user_email():
+        return redirect("/login")
+
+    train_number = request.args.get("train")
+    ticket_class = request.args.get("class")
+    date = request.args.get("date")
+
+    return render_template("book_ticket.html",
+                           train_number=train_number, ticket_class=ticket_class, date=date)
+
+@app.route("/book-ticket")
+def book_ticket():
+    email = auth.get_logged_in_user_email()
+    if not email:
+        return redirect("/login")
+
+    db.book_ticket(train_number=request.args.get("train"),
+                   ticket_class=request.args.get("class"),
+                   date=request.args.get("date"),
+                   passenger_name=request.args.get("passenger_name"),
+                   passenger_email=email)
+
+    return redirect("/bookings")
+
+@app.route("/bookings")
+def my_bookings():
+    email = auth.get_logged_in_user_email()
+    if not email:
+        return redirect("/login")
+
+    return "hello"
 
 @app.route("/hello")
 def hello():

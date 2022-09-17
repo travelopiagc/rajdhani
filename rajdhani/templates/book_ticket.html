@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Book a ticket</h2>
+</div>
+
+<form>
+  <div class="row mb-3">
+    <div class="col-auto">
+        <label for="train" class="form-label">Train Number</label>
+        <input type="text" name="train" class="form-control" value="{{ train_number }}" disabled></input>
+    </div>
+    <div class="col-auto">
+        <label for="class" class="form-label">Ticket Class</label>
+        <input type="text" name="class" class="form-control" value="{{ ticket_class }}" disabled></input>
+    </div>
+    <div class="col-auto">
+        <label for="class" class="form-label">Date</label>
+        <input type="date" name="class" class="form-control" value="{{ date }}" disabled></input>
+    </div>
+  </div>
+  <div class="mb-3">
+      <label for="class" class="form-label">Passenger Name</label>
+      <input type="text" name="class" class="form-control" required></input>
+  </div>
+</form>
+{% endblock %}

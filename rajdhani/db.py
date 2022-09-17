@@ -24,6 +24,7 @@ def search_trains(
         from_station_code,
         to_station_code,
         ticket_class=None,
+        departure_date=None,
         departure_time=[],
         arrival_time=[]):
     """Returns all the trains that source to destination stations on
@@ -41,3 +42,11 @@ def get_schedule(train_number):
     """Returns the schedule of a train.
     """
     return placeholders.SCHEDULE
+
+def book_ticket(train_number, ticket_class, date):
+    """Books a ticket and returns the booking ID.
+    """
+    # TODO: make a db query and insert a new booking
+    # into the booking table
+
+    return 1
