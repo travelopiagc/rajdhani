@@ -6,6 +6,7 @@ from flask import current_app, request, session
 import jwt
 
 from . import config
+from . import mail
 
 
 def create_magic_link(email):
@@ -31,7 +32,7 @@ def decode_magic_token(token):
 
 def send_magic_link(email, testing=False):
     # NOTE: Please use this configuration to send the emails
-    hostname, port, username, password = get_smtp_credentials(testing=testing)
+    hostname, port, username, password = mail.get_smtp_credentials(testing=testing)
 
     # TODO: use SMTP to send the magic link. Use above credentials for SMTP
 
@@ -53,17 +54,3 @@ def login_user(email):
 
 def get_logged_in_user_email():
     return session.get("user_email")
-
-
-def get_smtp_credentials(testing=False):
-    """Returns SMTP credentials as a 4-tuple of (hostname, port, username, password).
-
-    hostname and port will never be None. username or password may be None when
-    authentication is not needed.
-    """
-    if testing is True:
-        creds_obj = config.smtp_test
-    else:
-        creds_obj = config.smtp
-
-    return creds_obj["hostname"], creds_obj["port"], creds_obj["username"], creds_obj["password"]
