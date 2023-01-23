@@ -37,21 +37,23 @@ def search_trains(
     t = train_table
 
     q = (
-        select([text('*')])
+        #select([text('*')])
+        select(t.c.number
+          ,t.c.name
+          ,t.c.from_station_code
+          ,t.c.from_station_name
+          ,t.c.to_station_code
+          ,t.c.to_station_name
+          ,t.c.departure
+          ,t.c.arrival
+          ,t.c.duration_h
+          ,t.c.duration_m
+          )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
     )
 
-
-    
-    # q = f"select * from train where from_station_code=='{from_station_code}' AND to_station_code='{to_station_code}'"
-    # columns, rows = db_ops.exec_query(q)
-    
     rows = q.execute()
-    
-    #print(columns)
-    # for r in rows:
-    #      print(r)
     return rows
 
 def search_stations(q):
