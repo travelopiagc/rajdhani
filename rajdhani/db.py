@@ -4,6 +4,7 @@ Module to interact with the database.
 
 from . import placeholders
 from . import db_ops
+from sqlalchemy import create_engine, text, MetaData, Table, select
 
 db_ops.ensure_db()
 
@@ -26,13 +27,31 @@ def search_trains(
     # TODO: make a db query to get the matching trains
     # and replace the following dummy implementation'
     
-    q = f"select * from train where from_station_code=='{from_station_code}' AND to_station_code='{to_station_code}'"
-    columns, rows = db_ops.exec_query(q)
+    
+
+    engine = create_engine(config.db_uri, echo=True)
+    meta = MetaData(bind=engine)
+    train_table = Table("train", meta, autoload=True)
+    station_table = Table("station", meta, autoload=True)
+
+    t = train_table
+
+    q = (
+        select([text('*')])
+        .where(t.c.from_station_code == from_station_code)
+        .where(t.c.to_station_code == to_station_code) 
+    )
+
+
+    
+    # q = f"select * from train where from_station_code=='{from_station_code}' AND to_station_code='{to_station_code}'"
+    # columns, rows = db_ops.exec_query(q)
+    
+    rows = q.execute()
     
     #print(columns)
-    # for r in rows:
-    #     print()
-    # print(rows)
+    for r in rows:
+         print(r)
     return rows
 
 def search_stations(q):
