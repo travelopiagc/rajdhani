@@ -19,16 +19,17 @@
     <label for="departure-date" class="form-label">Date</label>
     <input type="date" class="form-control" name="date" value="{{ args.date or today }}"></input>
   </div>
+
   {% if config.flag_ticketclass_in_search %}
     <div class="mb-3" id="to-station-div">
       <label for="ticket-class" class="form-label">Class</label>
       <select name="class" class="form-control" id="ticket-class">
-        <option value="SL" {{ "selected" if args.class == "SL" }}>Sleeper</option>
-        <option value="3A" {{ "selected" if args.class == "3A" }}>Third AC</option>
-        <option value="2A" {{ "selected" if args.class == "2A" }}>Second AC</option>
-        <option value="1A" {{ "selected" if args.class == "1A" }}>Firs AC</option>
-        <option value="FC" {{ "selected" if args.class == "FC" }}>First Class</option>
-        <option value="CC" {{ "selected" if args.class == "CC" }}>Chair Car</option>
+        <option value="SL" {{ "selected" if args.class == "SL" }}>Sleeper (SL)</option>
+        <option value="3A" {{ "selected" if args.class == "3A" }}>Third AC (3A)</option>
+        <option value="2A" {{ "selected" if args.class == "2A" }}>Second AC (2A)</option>
+        <option value="1A" {{ "selected" if args.class == "1A" }}>First AC (1A)</option>
+        <option value="FC" {{ "selected" if args.class == "FC" }}>First Class (FC)</option>
+        <option value="CC" {{ "selected" if args.class == "CC" }}>Chair Car (CC)</option>
       </select>
       </ul>
     </div>
