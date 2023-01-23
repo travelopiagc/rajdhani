@@ -50,8 +50,8 @@ def search_trains(
     rows = q.execute()
     
     #print(columns)
-    for r in rows:
-         print(r)
+    # for r in rows:
+    #      print(r)
     return rows
 
 def search_stations(q):
