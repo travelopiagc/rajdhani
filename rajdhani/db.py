@@ -10,7 +10,6 @@ db_ops.ensure_db()
 # config has 'db_uri' that can be used to connect to the database
 from . import config
 
-
 def search_trains(
         from_station_code,
         to_station_code,
@@ -25,9 +24,16 @@ def search_trains(
     This is used to get show the trains on the search results page.
     """
     # TODO: make a db query to get the matching trains
-    # and replace the following dummy implementation
-
-    return placeholders.SEARCH_TRAINS
+    # and replace the following dummy implementation'
+    
+    q = f"select * from train where from_station_code=='{from_station_code}' AND to_station_code='{to_station_code}'"
+    columns, rows = db_ops.exec_query(q)
+    
+    #print(columns)
+    # for r in rows:
+    #     print()
+    # print(rows)
+    return rows
 
 def search_stations(q):
     """Returns the top ten stations matching the given query string.
