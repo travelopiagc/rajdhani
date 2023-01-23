@@ -7,18 +7,9 @@ from . import db_ops
 
 db_ops.ensure_db()
 
+# config has 'db_uri' that can be used to connect to the database
+from . import config
 
-def search_stations(q):
-    """Returns the top ten stations matching the given query string.
-
-    This is used to get show the auto complete on the home page.
-
-    The q is the few characters of the station name or
-    code entered by the user.
-    """
-    # TODO: make a db query to get the matching stations
-    # and replace the following dummy implementation
-    return placeholders.AUTOCOMPLETE_STATIONS
 
 def search_trains(
         from_station_code,
@@ -37,6 +28,18 @@ def search_trains(
     # and replace the following dummy implementation
 
     return placeholders.SEARCH_TRAINS
+
+def search_stations(q):
+    """Returns the top ten stations matching the given query string.
+
+    This is used to get show the auto complete on the home page.
+
+    The q is the few characters of the station name or
+    code entered by the user.
+    """
+    # TODO: make a db query to get the matching stations
+    # and replace the following dummy implementation
+    return placeholders.AUTOCOMPLETE_STATIONS
 
 def get_schedule(train_number):
     """Returns the schedule of a train.
