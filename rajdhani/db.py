@@ -4,7 +4,7 @@ Module to interact with the database.
 
 from . import placeholders
 from . import db_ops
-from sqlalchemy import create_engine, text, MetaData, Table, select, func
+from sqlalchemy import create_engine, text, MetaData, Table, select, func, or_
 
 db_ops.ensure_db()
 
@@ -46,30 +46,17 @@ def search_trains(
     s = station_table
     b = booking_table
     sch = schedule_table
+   
+   
     
-    
-    # q = select(func.count(b.c.id))
-    # count = q.execute().one()
-    # print("Count: ", count)
-    
-    # q = (
-    #     select(#b.c.id
-    #            #b.c.train_number
-    #         #    ,b.c.from_station_code
-    #         #    ,b.c.to_station_code
-    #         #    ,b.c.passenger_name
-    #         #    ,b.c.passenger_email
-    #            b.c.ticket_class
-    #         #    ,b.c.date
-    #            )
-    #     .limit(5)
-    #     #select(b.c.train_number)
-    #    # .where(b.c.train_number == 12028)
-    # )
-    # rows = q.execute().all()
-    # print("Bookings:")
-    # for row in rows:
-    #     print(row)
+   
+    ticket_class_search=(or_((t.c.sleeper == 1 and ticket_class=='SL')
+         ,(t.c.second_ac == 1 and ticket_class=='2A')
+         ,(t.c.first_ac == 1 and ticket_class=='1A')
+         ,(t.c.first_class == 1 and ticket_class=='FC')
+         ,(t.c.chair_car == 1 and ticket_class=='CC'))
+                         ).label("ticket_class")
+   
 
     q = (
         #select([text('*')])
@@ -83,15 +70,14 @@ def search_trains(
           ,t.c.arrival
           ,t.c.duration_h
           ,t.c.duration_m
-          #,b.c.train_number
           )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
-        .where(b.c.train_number == t.c.number) 
-        .where(b.c.ticket_class == ticket_class)
+        .where(ticket_class_search)
     )
 
     rows = q.execute()
+    
     return rows
 
 def search_stations(q):
