@@ -6,7 +6,7 @@ secret_key = os.getenv("SECRET_KEY", "helloworld")
  # Note: Please enable these flags only when the task asks you to do
 
 flag_homepage = True
-flag_ticketclass_in_search = False
+flag_ticketclass_in_search = True
 flag_search_filters = False
 flag_show_schedule_link = False
 flag_bookings = False
