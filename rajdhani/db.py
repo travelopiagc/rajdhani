@@ -48,14 +48,20 @@ def search_trains(
     sch = schedule_table
    
    
-    
+    if ticket_class == 'SL':
+        ticket_class_search=(t.c.sleeper == 1).label("SL")
+    elif  ticket_class=='2A':
+        ticket_class_search=(t.c.second_ac == 1).label("2A")
+    elif ticket_class=='1A':
+        ticket_class_search=(t.c.first_ac == 1).label("1A")
+    elif ticket_class=='FC':
+        ticket_class_search=(t.c.first_class == 1).label("FC")  
+    elif ticket_class=='CC':
+        ticket_class_search=(t.c.chair_car == 1).label("CC")
+    else:
+        ticket_class_search=text('1==1')
    
-    ticket_class_search=(or_((t.c.sleeper == 1 and ticket_class=='SL')
-         ,(t.c.second_ac == 1 and ticket_class=='2A')
-         ,(t.c.first_ac == 1 and ticket_class=='1A')
-         ,(t.c.first_class == 1 and ticket_class=='FC')
-         ,(t.c.chair_car == 1 and ticket_class=='CC'))
-                         ).label("ticket_class")
+    
    
 
     q = (
