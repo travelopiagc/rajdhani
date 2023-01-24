@@ -73,8 +73,8 @@ def search_trains(
           ,t.c.arrival
           ,t.c.duration_h
           ,t.c.duration_m
-          ,t.c.departure
-          ,t.c.arrival
+          #,t.c.departure
+          #,t.c.arrival
           )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
