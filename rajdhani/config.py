@@ -7,7 +7,7 @@ secret_key = os.getenv("SECRET_KEY", "helloworld")
 
 flag_homepage = True
 flag_ticketclass_in_search = True
-flag_search_filters = False
+flag_search_filters = True
 flag_show_schedule_link = False
 flag_bookings = False
 flag_login = False

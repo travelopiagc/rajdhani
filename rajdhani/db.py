@@ -4,12 +4,24 @@ Module to interact with the database.
 
 from . import placeholders
 from . import db_ops
-from sqlalchemy import create_engine, text, MetaData, Table, select, func, or_
+from sqlalchemy import create_engine, text, MetaData, Table, select, func, or_, and_, between
+from datetime import datetime
 
 db_ops.ensure_db()
 
 # config has 'db_uri' that can be used to connect to the database
 from . import config
+
+time_format = '%H:%M:%S'
+
+time_ranges={} 
+time_ranges["slot1"]= (datetime.strptime("00:00:00", time_format).time(),datetime.strptime("08:00:00", time_format).time())
+time_ranges["slot2"]= (datetime.strptime("08:00:00", time_format).time(),datetime.strptime("12:00:00", time_format).time())
+time_ranges["slot3"]= (datetime.strptime("12:00:00", time_format).time(),datetime.strptime("16:00:00", time_format).time())
+time_ranges["slot4"]= (datetime.strptime("16:00:00", time_format).time(),datetime.strptime("20:00:00", time_format).time())
+time_ranges["slot5"]= (datetime.strptime("20:00:00", time_format).time(),datetime.strptime("23:59:59", time_format).time())
+    
+   
 
 def search_trains(
         from_station_code,
@@ -46,26 +58,11 @@ def search_trains(
     s = station_table
     b = booking_table
     sch = schedule_table
-   
-   
-    if ticket_class == 'SL':
-        ticket_class_search=(t.c.sleeper == 1).label("SL")
-    elif  ticket_class=='2A':
-        ticket_class_search=(t.c.second_ac == 1).label("2A")
-    elif ticket_class=='1A':
-        ticket_class_search=(t.c.first_ac == 1).label("1A")
-    elif ticket_class=='FC':
-        ticket_class_search=(t.c.first_class == 1).label("FC")  
-    elif ticket_class=='CC':
-        ticket_class_search=(t.c.chair_car == 1).label("CC")
-    else:
-        ticket_class_search=text('1==1')
-   
-    
-   
+        
+    ticket_class_search = ticket_class_searches(t, ticket_class)
+    departure_time_search, arrival_time_search = train_time_searches(t, departure_time, arrival_time)  
 
     q = (
-        #select([text('*')])
         select(t.c.number
           ,t.c.name
           ,t.c.from_station_code
@@ -76,13 +73,19 @@ def search_trains(
           ,t.c.arrival
           ,t.c.duration_h
           ,t.c.duration_m
+          ,t.c.departure
+          ,t.c.arrival
           )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
-        .where(ticket_class_search)
+        .where(or_(ticket_class_search))
+        .where(or_(*departure_time_search))
+        .where(or_(*arrival_time_search))
     )
 
     rows = q.execute()
+    # for row in rows:
+    #     print(row)
     
     return rows
 
@@ -118,3 +121,32 @@ def get_trips(email):
     # made by user with `email`
 
     return placeholders.TRIPS
+
+
+def time_in_a_range(train_time, range):
+    return between(func.strftime(time_format,train_time), range[0], range[1])
+
+def train_time_searches(t, departure_time, arrival_time):   
+    departure_time_search = []
+    for dep_time in departure_time:
+        departure_time_search.append(and_(time_in_a_range(t.c.departure, time_ranges[dep_time])))
+        
+    arrival_time_search = []
+    for arr_time in arrival_time:
+        arrival_time_search.append(and_(time_in_a_range(t.c.arrival,time_ranges[arr_time])))
+        
+    return departure_time_search, arrival_time_search
+
+def ticket_class_searches(t, ticket_class):
+    if ticket_class == 'SL':
+        return (t.c.sleeper == 1).label("SL")
+    elif  ticket_class=='2A':
+        return (t.c.second_ac == 1).label("2A")
+    elif ticket_class=='1A':
+        return (t.c.first_ac == 1).label("1A")
+    elif ticket_class=='FC':
+        return (t.c.first_class == 1).label("FC")  
+    elif ticket_class=='CC':
+        return (t.c.chair_car == 1).label("CC")
+    else:
+        return None
