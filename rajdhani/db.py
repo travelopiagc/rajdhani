@@ -41,8 +41,6 @@ def search_trains(
     station_table = Table("station", meta, autoload=True)
     booking_table = Table("booking", meta, autoload=True)
     schedule_table = Table("schedule", meta, autoload=True)
-    
-    print("Ticket class:", ticket_class)
 
     t = train_table
     s = station_table
@@ -50,9 +48,9 @@ def search_trains(
     sch = schedule_table
     
     
-    q = select(func.count(b.c.id))
-    count = q.execute().one()
-    print("Count: ", count)
+    # q = select(func.count(b.c.id))
+    # count = q.execute().one()
+    # print("Count: ", count)
     
     # q = (
     #     select(#b.c.id
