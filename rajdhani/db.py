@@ -78,7 +78,7 @@ def search_trains(
           )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
-        .where(or_(*ticket_class_search))
+        .where(ticket_class_search)
         .where(or_(*departure_time_search))
         .where(or_(*arrival_time_search))
         
@@ -140,14 +140,14 @@ def train_time_searches(t, departure_time, arrival_time):
 
 def ticket_class_searches(t, ticket_class):
     if ticket_class == 'SL':
-        return [(t.c.sleeper == 1).label("SL")]
+        return (t.c.sleeper == 1).label("SL")
     elif  ticket_class=='2A':
-        return [(t.c.second_ac == 1).label("2A")]
+        return (t.c.second_ac == 1).label("2A")
     elif ticket_class=='1A':
-        return [(t.c.first_ac == 1).label("1A")]
+        return (t.c.first_ac == 1).label("1A")
     elif ticket_class=='FC':
-        return [(t.c.first_class == 1).label("FC")] 
+        return (t.c.first_class == 1).label("FC")
     elif ticket_class=='CC':
-        return [(t.c.chair_car == 1).label("CC")]
+        return (t.c.chair_car == 1).label("CC")
     else:
-        return []
+        return text("1==1")
