@@ -95,7 +95,7 @@ def search_stations(q):
         select(s.c.code
           ,s.c.name
           )
-        .where(or_(func.lower(s.c.name).contains(q.lower()),func.lower(s.c.code).contains(q.lower())))
+        .where(or_(func.lower(s.c.name).contains(q.lower()),func.lower(s.c.code).like(q.lower() + '%')))
         .limit(10)
     )
 
