@@ -21,7 +21,12 @@ time_ranges["slot3"]= (datetime.strptime("12:00:00", time_format).time(),datetim
 time_ranges["slot4"]= (datetime.strptime("16:00:00", time_format).time(),datetime.strptime("20:00:00", time_format).time())
 time_ranges["slot5"]= (datetime.strptime("20:00:00", time_format).time(),datetime.strptime("23:59:59", time_format).time())
     
-   
+engine = create_engine(config.db_uri, echo=True)
+meta = MetaData(bind=engine)   
+train_table = Table("train", meta, autoload=True)
+station_table = Table("station", meta, autoload=True)
+booking_table = Table("booking", meta, autoload=True)
+schedule_table = Table("schedule", meta, autoload=True)
 
 def search_trains(
         from_station_code,
@@ -36,28 +41,11 @@ def search_trains(
 
     This is used to get show the trains on the search results page.
     """
-    # TODO: make a db query to get the matching trains
-    # and replace the following dummy implementation'
-    
-    
 
-    engine = create_engine(config.db_uri, echo=True)
-    meta = MetaData(bind=engine)
-    # meta.reflect(engine)
-    # for table in meta.tables.values():
-    #     print("Table name: ", table.name)
-    #     for column in table.c:
-    #         print("Column: ", column.name)
     
-    train_table = Table("train", meta, autoload=True)
-    station_table = Table("station", meta, autoload=True)
-    booking_table = Table("booking", meta, autoload=True)
-    schedule_table = Table("schedule", meta, autoload=True)
 
     t = train_table
-    s = station_table
-    b = booking_table
-    sch = schedule_table
+   
         
     ticket_class_search = ticket_class_searches(t, ticket_class)
     departure_time_search, arrival_time_search = train_time_searches(t, departure_time, arrival_time)  
@@ -73,12 +61,10 @@ def search_trains(
           ,t.c.arrival
           ,t.c.duration_h
           ,t.c.duration_m
-          #,t.c.departure
-          #,t.c.arrival
           )
         .where(t.c.from_station_code == from_station_code)
         .where(t.c.to_station_code == to_station_code) 
-        .where(ticket_class_search)
+        .where(or_(ticket_class_search))
         .where(or_(*departure_time_search))
         .where(or_(*arrival_time_search))
         
@@ -98,9 +84,27 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    # TODO: make a db query to get the matching stations
-    # and replace the following dummy implementation
-    return placeholders.AUTOCOMPLETE_STATIONS
+    
+    s = station_table
+    b = booking_table
+    sch = schedule_table
+    
+    
+    
+    query = (
+        select(s.c.code
+          ,s.c.name
+          )
+        .where(or_(func.lower(s.c.name).contains(q.lower()),func.lower(s.c.code).contains(q.lower())))
+        .limit(10)
+    )
+
+    rows = query.execute()
+    stations=[]
+    for row in rows:
+        stations.append({"code": row.code, "name":row.name})
+    return stations
+   
 
 def get_schedule(train_number):
     """Returns the schedule of a train.
