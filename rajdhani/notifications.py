@@ -14,8 +14,6 @@ def send_booking_confirmation_email(booking):
     
     client = Client(config.smtp_hostname, config.smtp_port)
     
-    r=client.sendmail(booking["passenger_email"], 'giedrius.ceginskas@travelopia.com',"""\
-        Train {train_number}:{ticket_class}, Date {date}, Passenger: {passenger_name} ({passenger_email}) \
-         """.format(**booking))
+    r=client.sendmail(booking["passenger_email"], booking["passenger_email"],"""Train {train_number}:{ticket_class}, Date {date}, Passenger: {passenger_name} ({passenger_email})""".format(**booking))
     
-    pass
+    return r
