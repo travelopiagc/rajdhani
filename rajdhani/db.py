@@ -132,9 +132,28 @@ def book_ticket(train_number, ticket_class, departure_date, passenger_name, pass
     """
     # TODO: make a db query and insert a new booking
     # into the booking table
+    
+    t = train_table
+    
+    q = (
+        select(
+            t.c.from_station_code
+            ,t.c.to_station_code
+            )
+        .where(t.c.number == train_number)
+    )
+    train_data = dict(q.execute().one())
+    
     b = booking_table
     
-    ins = b.insert().values(train_number=train_number, ticket_class=ticket_class,date=departure_date, passenger_name=passenger_name,passenger_email=passenger_email)
+    ins = b.insert().values(train_number=train_number
+                            , ticket_class=ticket_class
+                            ,date=departure_date
+                            , passenger_name=passenger_name
+                            ,passenger_email=passenger_email
+                            ,from_station_code=train_data["from_station_code"]
+                            ,to_station_code=train_data["to_station_code"]
+                            )
       
     result = engine.execute(ins)
     #print(result.inserted_primary_key)
