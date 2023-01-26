@@ -145,6 +145,7 @@ def book_ticket(train_number, ticket_class, departure_date, passenger_name, pass
     train_data = dict(q.execute().one())
     
     b = booking_table
+    t = train_table
     
     ins = b.insert().values(train_number=train_number
                             , ticket_class=ticket_class
@@ -156,8 +157,24 @@ def book_ticket(train_number, ticket_class, departure_date, passenger_name, pass
                             )
       
     result = engine.execute(ins)
+    booking_id=result.inserted_primary_key[0]
+    
+    get_inserted_booking = (
+        select(
+            b.c.id
+            ,b.c.passenger_name
+            ,b.c.passenger_email
+            ,b.c.train_number
+            ,t.c.name
+            ,b.c.ticket_class
+            ,b.c.date
+            )
+        .where(b.c.id==booking_id)
+        .where(b.c.train_number==t.c.number)
+        )
+    new_booking = dict(get_inserted_booking.execute().one())
     #print(result.inserted_primary_key)
-    return result
+    return dict(new_booking)
 
 def get_trips(email):
     """Returns the bookings made by the user
