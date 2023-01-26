@@ -5,6 +5,8 @@ Module to interact with the database.
 from . import placeholders
 from . import db_ops
 from sqlalchemy import create_engine, text, MetaData, Table, select, func, or_, and_, between
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from datetime import datetime
 
 db_ops.ensure_db()
@@ -22,7 +24,10 @@ time_ranges["slot4"]= (datetime.strptime("16:00:00", time_format).time(),datetim
 time_ranges["slot5"]= (datetime.strptime("20:00:00", time_format).time(),datetime.strptime("23:59:59", time_format).time())
     
 engine = create_engine(config.db_uri, echo=True)
+Base = declarative_base(bind=engine)
+Session = sessionmaker(bind=engine)
 meta = MetaData(bind=engine)   
+
 train_table = Table("train", meta, autoload=True)
 station_table = Table("station", meta, autoload=True)
 booking_table = Table("booking", meta, autoload=True)
@@ -84,12 +89,7 @@ def search_stations(q):
     The q is the few characters of the station name or
     code entered by the user.
     """
-    
     s = station_table
-    b = booking_table
-    sch = schedule_table
-    
-    
     
     query = (
         select(s.c.code
@@ -132,8 +132,13 @@ def book_ticket(train_number, ticket_class, departure_date, passenger_name, pass
     """
     # TODO: make a db query and insert a new booking
     # into the booking table
-
-    return placeholders.TRIPS[0]
+    b = booking_table
+    
+    ins = b.insert().values(train_number=train_number, ticket_class=ticket_class,date=departure_date, passenger_name=passenger_name,passenger_email=passenger_email)
+      
+    result = engine.execute(ins)
+    #print(result.inserted_primary_key)
+    return result
 
 def get_trips(email):
     """Returns the bookings made by the user
@@ -171,3 +176,24 @@ def ticket_class_searches(t, ticket_class):
         return (t.c.chair_car == 1).label("CC")
     else:
         return text("1==1")
+    
+    
+class Booking(Base):
+    __tablename__ = "booking"
+    
+    id = Column(String, primary_key=True)
+    train_number = Column(String)
+    from_station_code = Column(String)
+    to_station_code = Column(String)
+    passenger_name = Column(String)
+    passenger_email = Column(String)    
+    ticket_class = Column(String)
+    date = Column(String)
+    
+    # def trains_to(self, to_station):
+    #     return (
+    #         session.query(Train)
+    #         .where(Train.from_station==self, Train.to_station==to_station)).all()
+    
+    # def __repr__(self):
+    #     return f"<Station {self.code}>"

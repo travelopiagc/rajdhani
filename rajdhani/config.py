@@ -9,7 +9,7 @@ flag_homepage = True
 flag_ticketclass_in_search = True
 flag_search_filters = True
 flag_show_schedule_link = True
-flag_bookings = False
+flag_bookings = True
 flag_login = False
 
 ## Database configurations
