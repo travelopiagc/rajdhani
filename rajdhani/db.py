@@ -109,7 +109,23 @@ def search_stations(q):
 def get_schedule(train_number):
     """Returns the schedule of a train.
     """
-    return placeholders.SCHEDULE
+    s = schedule_table
+    
+    query = (
+        select(s.c.station_code
+          ,s.c.station_name
+          ,s.c.day
+          ,s.c.arrival
+          ,s.c.departure
+          )
+        .where(s.c.train_number==train_number)
+    )
+    
+    rows = query.execute()
+    # for row in rows:
+    #     print(row)
+        
+    return rows
 
 def book_ticket(train_number, ticket_class, departure_date, passenger_name, passenger_email):
     """Book a ticket for passenger

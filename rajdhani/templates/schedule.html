@@ -15,7 +15,7 @@
   </thead>
   <tbody>
     {% for row in schedule %}
-    {% if row.departure or row.arrival %}
+    {% if row.departure != "None" or row.arrival != "None" %}
     <tr>
       <th>{{ row.station_code  }}</th>
       <th>{{ row.station_name }}</th>
