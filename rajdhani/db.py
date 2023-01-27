@@ -28,6 +28,8 @@ Base = declarative_base(bind=engine)
 Session = sessionmaker(bind=engine)
 meta = MetaData(bind=engine)   
 
+session=Session()
+
 train_table = Table("train", meta, autoload=True)
 station_table = Table("station", meta, autoload=True)
 booking_table = Table("booking", meta, autoload=True)
@@ -76,6 +78,14 @@ def search_trains(
     )
 
     rows = q.execute()
+    
+    
+    # trains=session.query(Train)\
+    #     .filter(Train.from_station_code==from_station_code).all()
+    # for train in trains:
+    #     print(train.name)
+    # print(trains)
+    
     # for row in rows:
     #     print(row)
     
@@ -181,8 +191,26 @@ def get_trips(email):
     """
     # TODO: make a db query and get the bookings
     # made by user with `email`
+    
+    bookings = session.query(Booking).filter_by(passenger_email=email).all()
+    
+    result=[]
+    for booking in bookings:
+        result.append(
+    {
+        "train_number": booking.train_number,
+        "train_name": booking.train.name if booking.train else "",
+        "from_station_code": booking.from_station_code,
+        "from_station_name": booking.from_station.name if booking.from_station else "",
+        "to_station_code": booking.to_station_code,
+        "to_station_name": booking.to_station.name if booking.to_station else "",
+        "ticket_class": booking.ticket_class,
+        "date": booking.date,
+        "passenger_name": booking.passenger_name,
+        "passenger_email": booking.passenger_email,
+    })
 
-    return placeholders.TRIPS
+    return result
 
 
 def time_in_a_range(train_time, range):
@@ -212,24 +240,82 @@ def ticket_class_searches(t, ticket_class):
         return (t.c.chair_car == 1).label("CC")
     else:
         return text("1==1")
+
+class Station(Base):
+    __tablename__ = "station"
     
+    code = Column(String, primary_key=True)
+    name = Column(String)
+    zone = Column(String)
+    state = Column(String)
+    address = Column(String)
+    latitude = Column(Float)    
+    longitude = Column(Float)
+    
+    def trains_to(self, to_station):
+        return (
+            session.query(Train)
+            .where(Train.from_station==self, Train.to_station==to_station)).all()
+    
+    def __repr__(self):
+        return f"<Station {self.code}>"
+    
+class Train(Base):
+    __tablename__ = "train"
+    
+    number = Column(String, primary_key=True)
+    name = Column(String)
+
+    from_station_code = Column(String, ForeignKey(Station.code))
+    from_station_name = Column(String)
+
+    to_station_code = Column(String, ForeignKey(Station.code))
+    to_station_name = Column(String)
+
+    duration_h = Column(Float)
+    duration_m = Column(Float)
+    
+    from_station = relationship("Station", 
+                                foreign_keys=[from_station_code],
+                                backref="starting_trains")
+    to_station = relationship("Station", 
+                                foreign_keys=[to_station_code],
+                                backref="terminating_trains")
+    
+    def from_station(self, from_station_code):
+        return (
+            session.query(Train)
+            .where(self.from_station_code==from_station_code)
+        ).all()
+        
+    
+    
+    def get_trains(self):
+        {
+            
+        }
+    
+    def __repr__(self):
+         return self        
     
 class Booking(Base):
     __tablename__ = "booking"
     
     id = Column(String, primary_key=True)
-    train_number = Column(String)
-    from_station_code = Column(String)
-    to_station_code = Column(String)
+    train_number = Column(String, ForeignKey(Train.number))
+    from_station_code = Column(String, ForeignKey(Station.code))
+    to_station_code = Column(String, ForeignKey(Station.code))
     passenger_name = Column(String)
     passenger_email = Column(String)    
     ticket_class = Column(String)
     date = Column(String)
     
-    # def trains_to(self, to_station):
-    #     return (
-    #         session.query(Train)
-    #         .where(Train.from_station==self, Train.to_station==to_station)).all()
-    
-    # def __repr__(self):
-    #     return f"<Station {self.code}>"
+    train = relationship("Train", 
+                                foreign_keys=[train_number],
+                                backref="train")
+    from_station = relationship("Station", 
+                                foreign_keys=[from_station_code],
+                                backref="booking_from")
+    to_station = relationship("Station", 
+                                foreign_keys=[to_station_code],
+                                backref="booking_to")
